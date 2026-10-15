@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quest 99 – CAT Numbers Test</title>
+<style>
+:root{--ac:#0FA3A3;--nv:#0B1F3A;--bd:#d6dbe0;--bg:#f6f8fa}
+*{box-sizing:border-box}body{margin:0;font:16px/1.55 Calibri,Carlito,system-ui,sans-serif;color:#1c1c1e;background:#fff}
+header{background:var(--nv);color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+header small{color:#7fd6d6}.tm{font:700 24px ui-monospace,Menlo,monospace}.tm.low{color:#ff8a8a}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}.box{border:1px solid var(--bd);border-radius:10px;padding:16px;background:#fff}
+.note{background:#ebf3f3;border-left:4px solid var(--ac);padding:10px 14px;margin:12px 0;border-radius:4px;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 250px;gap:16px;align-items:start}@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.qn{color:var(--ac);font-weight:700}.q{font-size:18px;margin:6px 0 14px}.opt{display:block;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;margin:6px 0;cursor:pointer}
+.opt:has(input:checked){border-color:var(--ac);background:#ebf3f3}
+input[type=number],input[type=text]{padding:9px;border:1px solid var(--bd);border-radius:8px;font-size:16px;width:100%;max-width:280px}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-size:15px;cursor:pointer}button.g{background:#fff;color:#1c1c1e;border:1px solid var(--bd)}button:disabled{opacity:.4}
+.nav{display:flex;justify-content:space-between;gap:8px;margin-top:16px;flex-wrap:wrap}
+#pal{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}#pal button{width:36px;height:34px;padding:0;background:#fff;color:#1c1c1e;border:1px solid var(--bd)}
+#pal button.a{background:var(--ac);color:#fff;border-color:var(--ac)}#pal button.c{outline:2px solid var(--nv)}
+.calc{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;position:sticky;top:64px}
+#cd{width:100%;text-align:right;font:20px ui-monospace,monospace;padding:8px;border:1px solid var(--bd);border-radius:6px;margin-bottom:8px;background:#fff;min-height:42px;overflow:hidden}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.keys button{background:#fff;color:#1c1c1e;border:1px solid var(--bd);padding:10px 0;font-size:17px}.keys button.o{background:#e3eeee}.keys button.e{background:var(--ac);color:#fff}
+#warn{background:#fff3cd;border:1px solid #ecd27a;padding:6px 12px;border-radius:6px;font-size:14px;margin-bottom:10px}
+</style></head><body>
+<header><div><b>Quest 99 · CAT Numbers Test</b><br><small id="who"></small></div><div id="sw" style="font-size:13px"></div><div class="tm" id="tm">40:00</div></header>
+<div class="wrap">
+<div id="start" class="box"><h2>Numbers – Timed Test</h2>
+<div class="note"><b>22 questions · 40 minutes.</b> +3 for correct · −1 for wrong MCQ · no negative marking for TITA (type-in answers).<br>Leaving this tab or minimizing the window is <b>recorded</b> and reported to your teacher. Do not refresh or close the page once started.</div>
+<p><input id="nm" type="text" placeholder="Full name"></p><p><input id="rl" type="text" placeholder="Roll no. / Batch ID"></p>
+<button onclick="begin()">Start test</button></div>
+<div id="test" hidden><div id="warn" hidden></div><div class="grid"><div class="box"><div id="qa"></div>
+<div class="nav"><button class="g" id="pv" onclick="show(cur-1)">← Previous</button><button class="g" onclick="clr()">Clear response</button><button id="nx" onclick="show(cur+1)">Next →</button></div>
+<div id="pal"></div><p style="text-align:center;margin:16px 0 0"><button class="g" onclick="submit(true)">Submit test</button></p></div>
+<div class="calc"><div id="cd"></div><div class="keys" id="ky"></div></div></div></div>
+<div id="end" class="box" hidden><h2>Test submitted</h2><p id="msg"></p></div>
+</div>
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzovk8s6rToGrBg51qzZrHVPGs5Szv00BDeQJS-TLYSSbR-VULrnOGNog8FCXdfKBuBUw/exec",DUR=2400,SHOW_SCORE=true;
+const Q=[{"q": "Two positive integers m and n satisfy HCF(m, n) = 14 and LCM(m, n) = 168. If m &lt; n and m divides 84, what is the maximum possible value of m?", "o": ["56", "42", "14", "28"]}, {"q": "If a, b and c are three prime numbers such that abc = 23(a + b + c), then the maximum possible value of a + b − c is", "o": ["28", "46", "33", "25"]}, {"q": "The number of integers n such that 1 ≤ n ≤ 10<sup>7</sup> and gcd(n, 10<sup>7</sup>) = 10<sup>3</sup> is", "o": ["3000", "2000", "5000", "4000"]}, {"q": "If m and n are two positive integers such that 7m + 11n = 200, then the minimum possible value of m + n is", "o": null}, {"q": "The number of positive integers that divide (1890)·(130)·(170) and are not divisible by 45 is", "o": null}, {"q": "You have been asked to select a positive integer N less than 1000 such that it is either a multiple of 4, or a multiple of 6, or an odd multiple of 9. The number of such numbers is", "o": null}, {"q": "John has 100 empty piggy-bank dolls numbered serially from 1 to 100. In the first turn he puts one coin in each doll. In the second turn he puts one coin in each of the 2<sup>nd</sup>, 4<sup>th</sup>, 6<sup>th</sup>, …, 98<sup>th</sup> and 100<sup>th</sup> doll. In the third turn he puts one coin in each of the 3<sup>rd</sup>, 6<sup>th</sup>, 9<sup>th</sup>, …, 96<sup>th</sup> and 99<sup>th</sup> doll. He continues this process and at last puts a coin in the 100<sup>th</sup> doll. How many dolls have an odd number of coins?", "o": ["25", "20", "15", "10"]}, {"q": "How many four-digit numbers with distinct digits in an ascending order are possible such that the product of these digits is more than 40 but less than 80?", "o": ["9", "10", "11", "12"]}, {"q": "(abc)<sub>8</sub> = (ayz)<sub>7</sub> such that a ≠ 0, y = (b + 2) and z = (c + 2). How many such numbers exist?", "o": null}, {"q": "A positive integer N has a total of 6 factors but it is not the fifth power of any positive integer. If the sum of all factors of N that are less than N and are not perfect squares is 293, what is the difference between the maximum possible value of N and the minimum possible value of N?", "o": null}, {"q": "Let p, q, r and s be positive integers such that both p and q exceed 1. If p<sup>r</sup> × q<sup>s</sup> = 108<sup>20</sup>, then the difference between the largest and smallest possible values of r − s is:", "o": ["39", "40", "59", "118"]}, {"q": "If x<sup>x<sup>2</sup> + x − 2</sup> = x<sup>x<sup>2</sup> + 2x − 8</sup>, how many non-negative real values of x exist?", "o": null}, {"q": "How many integer solutions exist to the equation 4/x + 3/y = −1 ?", "o": null}, {"q": "James, Remus and Sirius distribute a standard pack of 52 playing cards among themselves. James says “The number of cards with me is a perfect square”. Remus replies “and the number with me is a perfect cube”. Sirius says “How amazing! The number with me is a fourth power of a natural number”. If all of them have at least one card, what is the difference between the number of cards with Remus and that with James?", "o": null}, {"q": "When divided by 10, (1<sup>1</sup> + 2<sup>2</sup> + 3<sup>3</sup> + 4<sup>4</sup> + 5<sup>5</sup>) leaves a remainder", "o": null}, {"q": "Consider the set S of all four-digit natural numbers greater than 9000, each having exactly 16 factors. If the prime factorization of each element in S is the product of powers of only two distinct prime numbers, the sum of all elements in S is", "o": null}, {"q": "If x, y and z are positive real numbers such that √x + √y − √z is the positive square root of 21 − 4√5 + 8√3 − 4√15, what is the value of xyz?", "o": ["240", "300", "180", "272"]}, {"q": "For natural numbers p, q and r, if pq + pr = 23 and pr + qr = 95, then the minimum possible value of pqr is", "o": null}, {"q": "The population of Mathrock Village, represented by N, is a four-digit number less than 1300 and divisible by 3. Each digit in N is odd. The three-digit number comprising the thousands, hundreds, and tens places of N in that order and the three-digit number consisting of the hundreds, tens, and units places of N in that order are both prime numbers. Determine how many distinct values N can assume.", "o": ["0", "1", "2", "3"]}, {"q": "Vaishali came across some interesting numbers. She describes them as the numbers of the type n such that n = x<sup>2</sup> = y<sup>3</sup>, where x and y are natural numbers. If she adds all such numbers less than 3000, which of the following numbers will she get?", "o": ["53955", "4501500", "11025", "794"]}, {"q": "If f(x) = x + 2x<sup>2</sup> + 3x<sup>3</sup> + 4x<sup>4</sup> + 5x<sup>5</sup>, where x is a positive integer, f(x) will always be divisible by _________.", "o": ["3", "5", "9", "7"]}, {"q": "The digital root of a natural number is the single-digit value obtained by an iterative process of summing digits, on each iteration using the result from the previous iteration to compute a digit sum. E.g. the digital root of 369 is 9 (the process: 3 + 6 + 9 = 18, 1 + 8 = 9). What is the digital root of 2<sup>99999</sup>?", "o": ["5", "6", "7", "8"]}];
+const $=id=>document.getElementById(id);let S=null,cur=0,iv;
+try{S=JSON.parse(localStorage.getItem('q99')||'null')}catch(e){}
+function save(){try{localStorage.setItem('q99',JSON.stringify(S))}catch(e){}}
+function left(){return Math.max(0,DUR-Math.floor((Date.now()-S.start)/1000))}
+function begin(){const n=$('nm').value.trim(),r=$('rl').value.trim();if(!n||!r){alert('Please enter your name and roll no.');return}
+S={name:n,roll:r,start:Date.now(),ans:Array(Q.length).fill(null),sw:0,bl:0,done:false};save();run()}
+function run(){$('who').textContent=S.name+' · '+S.roll;$('start').hidden=true;if(S.done){fin();return}
+$('test').hidden=false;pal();show(0);upd();tick();iv=setInterval(tick,1000)}
+function tick(){const l=left(),m=Math.floor(l/60),s=l%60,e=$('tm');e.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;e.className='tm'+(l<=300?' low':'');if(l<=0)submit(false)}
+function pal(){$('pal').innerHTML=Q.map((_,i)=>'<button id="p'+i+'" onclick="show('+i+')">'+(i+1)+'</button>').join('')}
+function mark(){Q.forEach((_,i)=>{const b=$('p'+i);b.className=(S.ans[i]!==null?'a ':'')+(i===cur?'c':'')})}
+function show(i){cur=Math.max(0,Math.min(Q.length-1,i));const q=Q[cur];let h='<div class="qn">Question '+(cur+1)+' of '+Q.length+(q.o?'':' · TITA (type your answer)')+'</div><div class="q">'+q.q+'</div>';
+if(q.o)h+=q.o.map((o,j)=>'<label class="opt"><input type="radio" name="a" value="'+j+'"'+(S.ans[cur]===j?' checked':'')+' onchange="setA('+j+')"> <b>('+'abcd'[j]+')</b> '+o+'</label>').join('');
+else h+='<input type="number" step="any" id="ti" placeholder="Your answer" value="'+(S.ans[cur]??'')+'" oninput="setT(this.value)">';
+$('qa').innerHTML=h;$('pv').disabled=cur===0;$('nx').disabled=cur===Q.length-1;mark()}
+function setA(j){S.ans[cur]=j;save();mark()}
+function setT(v){S.ans[cur]=v===''?null:+v;save();mark()}
+function clr(){S.ans[cur]=null;save();show(cur)}
+function upd(){$('sw').textContent='Tab switches: '+S.sw+' · Window blurs: '+S.bl;if(S.sw+S.bl>0){const w=$('warn');w.hidden=false;w.textContent='⚠ Leaving the test window has been recorded ('+S.sw+' tab switch(es), '+S.bl+' blur(s)).'}}
+document.addEventListener('visibilitychange',()=>{if(S&&!S.done&&!$('test').hidden&&document.visibilityState==='hidden'){S.sw++;save();upd()}});
+window.addEventListener('blur',()=>{setTimeout(()=>{if(S&&!S.done&&!$('test').hidden&&document.visibilityState==='visible'&&!document.hasFocus()){S.bl++;save();upd()}},300)});
+async function submit(manual){if(S.done)return;if(manual&&!confirm('Submit the test now? You cannot change answers afterwards.'))return;
+clearInterval(iv);if(S.taken==null)S.taken=DUR-left();save();$('test').hidden=true;$('end').hidden=false;$('msg').textContent='Submitting… please keep this page open.';
+const body={name:S.name,roll:S.roll,answers:S.ans,tabSwitches:S.sw,blurs:S.bl,timeTaken:S.taken,clientTime:new Date().toISOString()};
+try{const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});const j=await r.json();if(!j.ok)throw 0;S.done=true;S.res=j;save();fin()}
+catch(e){$('msg').innerHTML='Could not reach the server. Check your internet and <button onclick="submit(false)">Retry submit</button>'}}
+function fin(){$('test').hidden=true;$('end').hidden=false;const r=S.res||{};$('msg').innerHTML='Your response has been recorded, '+S.name+'.'+(SHOW_SCORE&&r.score!=null?'<br><b>Score: '+r.score+' / '+r.max+'</b> (Correct '+r.correct+' · Wrong '+r.wrong+' · Unattempted '+r.skipped+')':'')}
+let ex='';const K=['C','⌫','(',')','7','8','9','÷','4','5','6','×','1','2','3','−','0','.','√','+'];
+$('ky').innerHTML=K.map(k=>'<button class="'+('÷×−+'.includes(k)?'o':'')+'" onclick="key(\''+k+'\')">'+k+'</button>').join('')+'<button class="e" style="grid-column:span 4" onclick="key(\'=\')">=</button>';
+function key(k){if(k==='C')ex='';else if(k==='⌫')ex=ex.slice(0,-1);else if(k==='='||k==='√'){try{let e=ex.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');if(!/^[0-9+\-*\/.() ]+$/.test(e))throw 0;let v=Function('"use strict";return ('+e+')')();if(k==='√')v=Math.sqrt(v);if(!isFinite(v))throw 0;ex=String(parseFloat(v.toPrecision(12)))}catch(x){ex='Error'}}else{if(ex==='Error')ex='';ex+=k}$('cd').textContent=ex}
+if(S&&!S.done)run();else if(S&&S.done){$('start').hidden=true;run()}
+</script></body></html>
